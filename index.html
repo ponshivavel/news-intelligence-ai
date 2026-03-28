@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>AI News Brain - Professional Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #0a0a0f;
+            --paper: #f5f2ec;
+            --accent: #c8a96e;
+            --accent2: #e05c3a;
+            --muted: #8a8a96;
+            --card-bg: #13131a;
+            --border: rgba(200,169,110,0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--ink);
+            min-height: 100vh;
+            color: var(--paper);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+        }
+
+        header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 24px;
+            margin-bottom: 60px;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .logo-eyebrow {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.25em;
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 900;
+            color: var(--paper);
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+
+        h1 span { color: var(--accent); }
+
+        .header-meta {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            color: var(--muted);
+            text-align: right;
+            line-height: 1.8;
+        }
+
+        .section {
+            margin-bottom: 32px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            background: var(--card-bg);
+            position: relative;
+            animation: fadeUp 0.5s ease both;
+        }
+
+        .section:nth-child(1) { animation-delay: 0.1s; }
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.3s; }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0.5;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 28px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(255,255,255,0.02);
+        }
+
+        .section-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            color: var(--muted);
+            text-transform: uppercase;
+        }
+
+        .section-body { padding: 28px; }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            color: var(--paper);
+            border: 1px solid var(--accent);
+            padding: 10px 22px;
+            border-radius: 2px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--accent);
+            transform: translateX(-100%);
+            transition: transform 0.25s ease;
+            z-index: -1;
+        }
+
+        .btn:hover::before { transform: translateX(0); }
+        .btn:hover { color: var(--ink); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn:disabled::before { transform: none; }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--ink);
+            border-color: var(--accent);
+            font-weight: 500;
+        }
+
+        .btn-primary::before { background: var(--accent2); }
+        .btn-primary:hover { color: white; border-color: var(--accent2); }
+
+        #summary {
+            line-height: 1.8;
+            font-size: 15px;
+            color: rgba(245,242,236,0.8);
+            font-weight: 300;
+            margin-top: 16px;
+        }
+
+        .articles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .article-card {
+            flex: 1 1 280px;
+            background: rgba(255,255,255,0.03);
+            padding: 20px;
+            border-radius: 2px;
+            border-left: 2px solid var(--accent);
+            transition: background 0.2s;
+        }
+
+        .article-card:hover { background: rgba(255,255,255,0.06); }
+        .article-card h3 { font-size: 14px; font-weight: 500; margin-bottom: 8px; }
+        .article-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            margin-top: 16px;
+        }
+
+        .timeline-card {
+            display: grid;
+            grid-template-columns: 60px 1fr;
+            position: relative;
+        }
+
+        .timeline-card:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 29px;
+            top: 36px;
+            bottom: -12px;
+            width: 1px;
+            background: var(--border);
+        }
+
+        .timeline-dot-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 14px;
+        }
+
+        .timeline-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 2px solid var(--ink);
+            box-shadow: 0 0 0 3px rgba(200,169,110,0.15);
+            flex-shrink: 0;
+        }
+
+        .timeline-content {
+            padding: 10px 0 28px;
+        }
+
+        .timeline-content h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--paper);
+            margin-bottom: 6px;
+        }
+
+        .timeline-content p {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        .ai-badge {
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--ink);
+            background: var(--accent);
+            padding: 3px 8px;
+            border-radius: 2px;
+        }
+
+        .ai-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--paper);
+            margin-bottom: 18px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 12px;
+            align-items: stretch;
+        }
+
+        #question {
+            flex: 1;
+            padding: 13px 18px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            color: var(--paper);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        #question::placeholder { color: var(--muted); font-weight: 300; }
+        #question:focus { border-color: var(--accent); background: rgba(200,169,110,0.04); }
+
+        #answer {
+            margin-top: 20px;
+            line-height: 1.8;
+            font-size: 15px;
+            color: rgba(245,242,236,0.85);
+            font-weight: 300;
+            padding: 20px;
+            background: rgba(255,255,255,0.03);
+            border-left: 2px solid var(--accent2);
+            border-radius: 0 2px 2px 0;
+            display: none;
+        }
+
+        #answer:not(:empty) { display: block; }
+
+        .status-msg {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            color: var(--accent);
+            margin-top: 12px;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .loading-text {
+            animation: pulse 1.2s ease infinite;
+        }
+
+        @media (max-width: 640px) {
+            .input-row { flex-direction: column; }
+            .btn { width: 100%; justify-content: center; }
+            header { flex-direction: column; align-items: flex-start; }
+            .header-meta { text-align: left; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <header>
+            <div>
+                <div class="logo-eyebrow">Powered by Claude AI · Live Feed</div>
+                <h1>AI News <span>Brain</span></h1>
+            </div>
+            <div class="header-meta">
+                Market Intelligence<br>
+                Professional Edition
+            </div>
+        </header>
+
+        <!-- News Section -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-label"> Latest Briefing</span>
+                <button class="btn" id="news-btn" onclick="loadNews()">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.18-3.36"/></svg>
+                    Load Latest News
+                </button>
+            </div>
+            <div class="section-body">
+                <div id="summary"></div>
+                <div id="articles" class="articles"></div>
+                <div id="news-status" class="status-msg"></div>
+            </div>
+        </div>
+
+        <!-- Timeline Section -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-label"> Market Timeline</span>
+                <button class="btn" id="timeline-btn" onclick="loadTimeline()">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    Load Timeline
+                </button>
+            </div>
+            <div class="section-body">
+                <div id="timeline" class="timeline"></div>
+                <div id="timeline-status" class="status-msg"></div>
+            </div>
+        </div>
+
+        <!-- AI Assistant Section -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-label"> AI Assistant</span>
+                <span class="ai-badge">Claude Powered</span>
+            </div>
+            <div class="section-body">
+                <div class="ai-title">Ask the Brain</div>
+                <div class="input-row">
+                    <input type="text" id="question" placeholder="Ask about market trends, news insights..." onkeydown="if(event.key==='Enter') ask()">
+                    <button class="btn btn-primary" id="ask-btn" onclick="ask()">
+                        Send
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    </button>
+                </div>
+                <div id="answer"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
