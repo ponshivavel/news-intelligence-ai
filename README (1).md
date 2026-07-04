@@ -1,4 +1,12 @@
 # AI News Brain 🧠
+
+### 🏆 Semi-Finalist — The Economic Times GenAI Hackathon 2026
+An AI-powered Financial News Intelligence System that transforms static market news into interactive, decision-driven intelligence. Built and recognized at a nation-scale innovation challenge.
+
+---
+
+
+# AI News Brain 🧠
 > **AI-Powered Financial News Intelligence System**  
 > Transform static market news into interactive, decision-driven intelligence.
 
