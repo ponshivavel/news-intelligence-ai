@@ -6,6 +6,11 @@ An AI-powered Financial News Intelligence System that transforms static market n
 ---
 
 
+
+https://github.com/user-attachments/assets/bb3cd82d-b728-4dec-b22d-3b69bb8d887d
+
+
+---
 # AI News Brain 🧠
 > **AI-Powered Financial News Intelligence System**  
 > Transform static market news into interactive, decision-driven intelligence.
